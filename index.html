@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css"
+		/>
+		<link rel="stylesheet" href="styles.css" />
+		<title>Tracalorie</title>
+	</head>
+	<body>
+		<!-- Header -->
+		<header class="header">
+			<div class="container">
+				<h1 class="header__brand-name">Tracalorie</h1>
+				<button class="button header-button" data-clear-all-button>
+					Clear All
+				</button>
+			</div>
+		</header>
+
+		<!-- Card -->
+		<div class="container">
+			<div class="card">
+				<form class="meal-form">
+					<h1 class="form__heading">Add Meal / Food Item</h1>
+					<div class="form__body">
+						<div class="input__group">
+							<input
+								type="text"
+								class="form__input"
+								placeholder="Add Item"
+								autocomplete="off"
+								data-item-input
+							/>
+							<label for="meal" class="form__label">Meal</label>
+						</div>
+						<div class="input__group">
+							<input
+								type="text"
+								class="form__input"
+								placeholder="Add Calories"
+								autocomplete="off"
+								data-calories-input
+							/>
+							<label for="calories" class="form__label">Calories</label>
+						</div>
+					</div>
+					<button
+						type="submit"
+						class="button button-submit button-submit--meal"
+						data-add-item-button
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							fill="currentColor"
+							class="add-icon"
+							viewBox="0 0 16 16"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
+							/>
+						</svg>
+						Add Meal
+					</button>
+				</form>
+			</div>
+			<h1 class="title title--total-calories">
+				Total Calories: <span data-total-calories>0</span>
+			</h1>
+			<ul class="meal-items-list" data-meal-items-list></ul>
+		</div>
+
+		<template data-control-buttons-template>
+			<div class="card__button-group">
+				<div class="control__button-group">
+					<button class="button button--update" data-update-item-button>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							fill="currentColor"
+							class="icon update-icon"
+							viewBox="0 0 16 16"
+						>
+							<path
+								d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+							/>
+							<path
+								fill-rule="evenodd"
+								d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+							/>
+						</svg>
+						update meal
+					</button>
+					<button class="button button--delete" data-delete-item-button>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							fill="currentColor"
+							class="icon delete-icon"
+							viewBox="0 0 16 16"
+						>
+							<path
+								d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"
+							/>
+						</svg>
+						delete meal
+					</button>
+				</div>
+				<button class="button button--back" data-back-button>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="20"
+						height="20"
+						fill="currentColor"
+						class="icon back-icon"
+						viewBox="0 0 16 16"
+					>
+						<path
+							d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
+						/>
+					</svg>
+					back
+				</button>
+			</div>
+		</template>
+		<template data-meal-item-template>
+			<li class="list__item">
+				<div class="list__item--container">
+					<span class="list__item--meal-name" data-meal-item-name>Steak:</span>
+					<span class="list__item--meal-calories" data-meal-item-calories
+						>300</span
+					>
+					Calories
+				</div>
+				<button class="button button--edit" data-edit-meal-item-button>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="20"
+						height="20"
+						fill="currentColor"
+						class="icon edit-icon"
+						viewBox="0 0 16 16"
+					>
+						<path
+							d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"
+						/>
+					</svg>
+				</button>
+			</li>
+		</template>
+	</body>
+</html>
