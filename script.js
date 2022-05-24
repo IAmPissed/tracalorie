@@ -45,11 +45,15 @@ const UIController = (() => {
                 foodItemElement.querySelector(UISelectors.mealItemCalories).innerText = foodItem.calories
                 document.querySelector(UISelectors.mealItemsList).append(foodItemElement)
             })
+        },
+        getSelectors() {
+            return UISelectors
         }
     }
 })()
 
 const App = ((ItemController, UIController) => {
+    const UISelectors = UIController.getSelectors()
 
     return {
         initialize() {
