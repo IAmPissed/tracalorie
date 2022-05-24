@@ -4,11 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css"
-		/>
 		<link rel="stylesheet" href="styles.css" />
+		<script src="script.js" defer></script>
 		<title>Tracalorie</title>
 	</head>
 	<body>
@@ -25,7 +22,7 @@
 		<!-- Card -->
 		<div class="container">
 			<div class="card">
-				<form class="meal-form">
+				<form class="meal-form" data-meal-form>
 					<h1 class="form__heading">Add Meal / Food Item</h1>
 					<div class="form__body">
 						<div class="input__group">
@@ -34,7 +31,7 @@
 								class="form__input"
 								placeholder="Add Item"
 								autocomplete="off"
-								data-item-input
+								data-item-name-input
 							/>
 							<label for="meal" class="form__label">Meal</label>
 						</div>
@@ -44,7 +41,7 @@
 								class="form__input"
 								placeholder="Add Calories"
 								autocomplete="off"
-								data-calories-input
+								data-item-calories-input
 							/>
 							<label for="calories" class="form__label">Calories</label>
 						</div>
@@ -52,7 +49,7 @@
 					<button
 						type="submit"
 						class="button button-submit button-submit--meal"
-						data-add-item-button
+						data-add-meal-item-button
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +75,7 @@
 		</div>
 
 		<template data-control-buttons-template>
-			<div class="card__button-group">
+			<div class="card__button-group" data-card-button-group>
 				<div class="control__button-group">
 					<button class="button button--update" data-update-item-button>
 						<svg
@@ -133,9 +130,9 @@
 			</div>
 		</template>
 		<template data-meal-item-template>
-			<li class="list__item">
+			<li class="list__item" data-food-item>
 				<div class="list__item--container">
-					<span class="list__item--meal-name" data-meal-item-name>Steak:</span>
+					<span class="list__item--meal-name" data-meal-item-name>Steak</span>
 					<span class="list__item--meal-calories" data-meal-item-calories
 						>300</span
 					>
