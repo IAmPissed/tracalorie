@@ -17,9 +17,17 @@ const ItemController = (() => {
         getFoodItems() {
             return data.foodItems
         },
+        addItem(name, calories) {
+            const id = data.foodItems.length > 0 ? data.foodItems[data.foodItems.length - 1].id + 1 : 0
+            calories = parseInt(calories)
+            const newFoodItem = new Item(id, name, calories)
+            data.foodItems.push(newFoodItem)
+            return newFoodItem
+        },
         logData() {
             return data
-        }
+        },
+
     }
 })()
 
@@ -46,6 +54,20 @@ const UIController = (() => {
                 document.querySelector(UISelectors.mealItemsList).append(foodItemElement)
             })
         },
+        renderFoodItem(foodItem) {
+            const foodItemTemplate = document.querySelector(UISelectors.mealItemTemplate)
+            const foodItemElement = foodItemTemplate.content.cloneNode(true)
+            foodItemElement.firstElementChild.dataset.foodId = foodItem.id
+            foodItemElement.querySelector(UISelectors.mealItemName).innerText = `${foodItem.name} :`
+            foodItemElement.querySelector(UISelectors.mealItemCalories).innerText = foodItem.calories
+            document.querySelector(UISelectors.mealItemsList).append(foodItemElement)
+        },
+        getItemInput() {
+            return {
+                name: document.querySelector(UISelectors.itemNameInput).value,
+                calories: document.querySelector(UISelectors.itemCaloriesInput).value
+            }
+        },
         getSelectors() {
             return UISelectors
         }
@@ -59,10 +81,26 @@ const App = ((ItemController, UIController) => {
         document.querySelector(UISelectors.addMealItemButton).addEventListener('click', handleAddItemSubmit)
     }
 
+    const handleAddItemSubmit = (e) => {
+        e.preventDefault()
+        const { name, calories } = UIController.getItemInput()
+        if (name === '' || calories === '') return
+        if (isItemNameNotValid(name) || isItemCaloriesNotValid(calories)) return
+        const newFoodItem = ItemController.addItem(name, calories)
+        UIController.renderFoodItem(newFoodItem)
+    }
+    const isItemNameNotValid = (name) => {
+        return !/^[a-zA-Z\s]+$/.test(name)
+    }
+    const isItemCaloriesNotValid = (calories) => {
+        return !/^[\d]+$/.test(calories)
+    }
+
     return {
         initialize() {
             const foodItems = ItemController.getFoodItems()
             UIController.renderFoodItems(foodItems)
+            loadEventListeners()
         }
     }
 })(ItemController, UIController)
