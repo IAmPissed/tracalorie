@@ -18,8 +18,12 @@ const SotrageController = (() => {
         clearItems() {
 
         },
-        updateItem(item) {
-
+        updateItem(updatedItem) {
+            const { id } = items.find(item => item.id === updatedItem.id)
+            items = items.map(item => {
+                return item.id === id ? updatedItem : item
+            })
+            localStorage.setItem(LOCAL_STORAGE_FOOD_ITEMS_KEY, JSON.stringify(items))
         }
     }
 })()
@@ -244,6 +248,7 @@ const App = ((ItemController, SotrageController, UIController) => {
         const { name, calories } = UIController.getItemInput()
         if (isItemNameNotValid(name) || isItemCaloriesNotValid(calories)) return
         const updatedFoodItem = ItemController.updateFoodItem(name, calories)
+        SotrageController.updateItem(updatedFoodItem)
         UIController.updateFoodItem(updatedFoodItem)
         const totalCalories = ItemController.getTotalCalories()
         UIController.renderTotalCalories(totalCalories)
