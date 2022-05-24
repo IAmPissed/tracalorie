@@ -4,6 +4,7 @@ const SotrageController = (() => {
 
     return {
         storeItem(item) {
+            console.log('storeItem')
             items.push(item)
             localStorage.setItem(LOCAL_STORAGE_FOOD_ITEMS_KEY, JSON.stringify(items))
         },
@@ -45,7 +46,6 @@ const ItemController = (() => {
             const id = data.foodItems.length > 0 ? data.foodItems[data.foodItems.length - 1].id + 1 : 0
             calories = parseInt(calories)
             const newFoodItem = new Item(id, name, calories)
-            data.foodItems.push(newFoodItem)
             return newFoodItem
         },
         deleteFoodItem(id) {
@@ -207,10 +207,10 @@ const App = ((ItemController, SotrageController, UIController) => {
         if (name === '' || calories === '') return
         if (isItemNameNotValid(name) || isItemCaloriesNotValid(calories)) return
         const newFoodItem = ItemController.addItem(name, calories)
+        SotrageController.storeItem(newFoodItem)
         UIController.renderFoodItem(newFoodItem)
         const totalCalories = ItemController.getTotalCalories()
         UIController.renderTotalCalories(totalCalories)
-        SotrageController.storeItem(newFoodItem)
         UIController.clearInputs()
     }
     const isItemNameNotValid = (name) => {
