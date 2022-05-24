@@ -8,7 +8,7 @@ const SotrageController = (() => {
             localStorage.setItem(LOCAL_STORAGE_FOOD_ITEMS_KEY, JSON.stringify(items))
         },
         getItems() {
-
+            return items
         },
         deleteItem(id) {
 
@@ -32,7 +32,7 @@ const ItemController = (() => {
     }
 
     const data = {
-        foodItems: [],
+        foodItems: SotrageController.getItems(),
         currentFoodItem: null,
         totalCalories: 0
     }
