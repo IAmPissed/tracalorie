@@ -53,7 +53,11 @@ const UIController = (() => {
 })()
 
 const App = ((ItemController, UIController) => {
-    const UISelectors = UIController.getSelectors()
+
+    const loadEventListeners = () => {
+        const UISelectors = UIController.getSelectors()
+        document.querySelector(UISelectors.addMealItemButton).addEventListener('click', handleAddItemSubmit)
+    }
 
     return {
         initialize() {
