@@ -1,3 +1,26 @@
+const SotrageController = (() => {
+    const LOCAL_STORAGE_FOOD_ITEMS_KEY = 'tracalorie.foodItems'
+    let items = JSON.parse(localStorage.getItem(LOCAL_STORAGE_FOOD_ITEMS_KEY)) || null
+
+    return {
+        storeItem(item) {
+
+        },
+        getItems() {
+
+        },
+        deleteItem(id) {
+
+        },
+        clearItems() {
+
+        },
+        updateItem(item) {
+
+        }
+    }
+})()
+
 const ItemController = (() => {
     function Item(id, name, calories) {
         this.id = id
