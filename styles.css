@@ -43,12 +43,16 @@ ul {
     outline: none;
 }
 .icon {
+    --max-size: 20px;
+    --min-size: 14px;
     margin-right: .25rem;
     pointer-events: none;
+    width: max(var(--min-size), var(--max-size));
+    height: max(var(--min-size), var(--max-size));
 }
 .header {
     background: var(--dark-blue);
-    padding: .5em 0;
+    padding: .75em 0;
 }
 .header .container {
     display: flex;
@@ -89,6 +93,7 @@ ul {
 }
 .form__heading {
     margin: 0;
+    font-size: clamp(1rem, 7.5vw , 2.5rem);
 }
 .input__group {
     margin-top: 1.25rem;
@@ -138,9 +143,6 @@ ul {
     box-shadow: 0 .2rem .5rem var(--very-light-gray);
     transform: translateY(-0.15rem);
 }
-/* .button__submit--meal:focus {
-    border-color: var(--very-light-blue);
-} */
 .card__button-group {
     display: flex;
     justify-content: space-between;
@@ -152,7 +154,8 @@ ul {
 .button--delete,
 .button--update,
 .button--back {
-    font-size: .95rem;
+    font-size: clamp(.5rem, 3vw, 1.1rem);
+    font-weight: 600;
     display: flex;
     align-items: center;
     color: white;
@@ -164,7 +167,7 @@ ul {
 }
 .button--update {
     background: var(--update-bg-color);
-    margin-right: .75rem;
+    margin-right: .75em;
 }
 .button--delete {
     background: var(--delete-bg-color);
@@ -182,6 +185,7 @@ ul {
     transform: translateY(-0.15rem);
 }
 .title--total-calories {
+    font-size: clamp(1.25rem, 3.5vw, 1.75rem);
     text-align: center;
     margin: 0;
     margin-top: 1.5rem;
