@@ -4,7 +4,6 @@ const SotrageController = (() => {
 
     return {
         storeItem(item) {
-            console.log('storeItem')
             items.push(item)
             localStorage.setItem(LOCAL_STORAGE_FOOD_ITEMS_KEY, JSON.stringify(items))
         },
@@ -12,7 +11,9 @@ const SotrageController = (() => {
             return items
         },
         deleteItem(id) {
-
+            const newItems = items.filter(item => item.id !== id)
+            items = newItems
+            localStorage.setItem(LOCAL_STORAGE_FOOD_ITEMS_KEY, JSON.stringify(items))
         },
         clearItems() {
 
@@ -259,6 +260,7 @@ const App = ((ItemController, SotrageController, UIController) => {
         ItemController.deleteFoodItem(id)
         const foodItems = ItemController.getFoodItems()
         UIController.renderFoodItems(foodItems)
+        SotrageController.deleteItem(id)
         const totalCalories = ItemController.getTotalCalories()
         UIController.renderTotalCalories(totalCalories)
         UIController.clearEditState()
