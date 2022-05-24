@@ -44,6 +44,14 @@ const ItemController = (() => {
                 calories: data.currentFoodItem.calories
             }
         },
+        updateFoodItem(name, calories) {
+            calories = parseInt(calories)
+            const foodItemToUpdate = data.foodItems.find((foodItem) => (foodItem.id === data.currentFoodItem.id))
+            foodItemToUpdate.name = name
+            foodItemToUpdate.calories = calories
+            foodItemToUpdate.updatedAt = new Intl.DateTimeFormat(undefined, { dateStyle: 'full', timeStyle: 'medium' }).format(new Date())
+            return foodItemToUpdate
+        },
         logData() {
             return data
         },
@@ -53,17 +61,23 @@ const ItemController = (() => {
 
 const UIController = (() => {
     const UISelectors = {
+        controlButtonsTemplate: '[data-control-buttons-template]',
         addMealItemButton: '[data-add-meal-item-button]',
         itemCaloriesInput: '[data-item-calories-input]',
         mealItemTemplate: '[data-meal-item-template]',
         mealItemCalories: '[data-meal-item-calories]',
+        updateItemButton: '[data-update-item-button]',
+        deleteItemButton: '[data-delete-item-button]',
         cardButtonGroup: '[data-card-button-group]',
+        foodItemElement: '[data-food-item]',
         itemEditButton: '[data-edit-meal-item-button]',
         totalCalories: '[data-total-calories]',
         mealItemsList: '[data-meal-items-list]',
         foodItemsList: '[data-meal-items-list]',
         itemNameInput: '[data-item-name-input]',
         mealItemName: '[data-meal-item-name]',
+        backButton: '[data-back-button]',
+        mealForm: '[data-meal-form]',
     }
 
     return {
@@ -108,6 +122,23 @@ const UIController = (() => {
             if (document.querySelector(UISelectors.cardButtonGroup)) document.querySelector(UISelectors.cardButtonGroup).remove()
             document.querySelector(UISelectors.addMealItemButton).style.display = 'flex'
         },
+        showEditState() {
+            const controlButtonsTemplate = document.querySelector(UISelectors.controlButtonsTemplate)
+            const controlButtonsElement = controlButtonsTemplate.content.cloneNode(true)
+            document.querySelector(UISelectors.addMealItemButton).style.display = 'none'
+            document.querySelector(UISelectors.mealForm).append(controlButtonsElement)
+        },
+        updateFoodItem(item) {
+            const foodItems = Array.from(document.querySelectorAll(UISelectors.foodItemElement))
+            foodItems.forEach(foodItem => {
+                const foodItemId = parseInt(foodItem.dataset.foodId)
+                if (foodItemId === item.id) {
+                    const foodItemToEdit = document.querySelector(`[data-food-id="${foodItemId}"]`)
+                    foodItemToEdit.querySelector(UISelectors.mealItemName).innerText = item.name
+                    foodItemToEdit.querySelector(UISelectors.mealItemCalories).innerText = item.calories
+                }
+            })
+        },
         getSelectors() {
             return UISelectors
         }
@@ -121,6 +152,7 @@ const App = ((ItemController, UIController) => {
         document.addEventListener('keypress', preventAddItemSubmitWhenEnterIsPressed)
         document.querySelector(UISelectors.addMealItemButton).addEventListener('click', handleAddItemSubmit)
         document.querySelector(UISelectors.foodItemsList).addEventListener('click', handleItemEditSubmit)
+        document.querySelector(UISelectors.mealForm).addEventListener('click', handleItemUpdateSubmit)
     }
 
     const preventAddItemSubmitWhenEnterIsPressed = (e) => {
@@ -154,7 +186,25 @@ const App = ((ItemController, UIController) => {
             const selectedFoodItemToEdit = ItemController.getFoodItemById(foodId)
             ItemController.setCurrentItem(selectedFoodItemToEdit)
             UIController.addItemToForm()
+            UIController.showEditState()
         }
+    }
+
+    const handleItemUpdateSubmit = (e) => {
+        e.preventDefault()
+        if (isUpdateItemButton(e)) updateFoodItem()
+    }
+    const isUpdateItemButton = (e) => {
+        return e.target.matches(UISelectors.updateItemButton)
+    }
+    const updateFoodItem = () => {
+        const { name, calories } = UIController.getItemInput()
+        if (isItemNameNotValid(name) || isItemCaloriesNotValid(calories)) return
+        const updatedFoodItem = ItemController.updateFoodItem(name, calories)
+        UIController.updateFoodItem(updatedFoodItem)
+        const totalCalories = ItemController.getTotalCalories()
+        UIController.renderTotalCalories(totalCalories)
+        UIController.clearEditState()
     }
 
     return {
