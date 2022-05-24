@@ -152,7 +152,8 @@ const App = ((ItemController, UIController) => {
         document.addEventListener('keypress', preventAddItemSubmitWhenEnterIsPressed)
         document.querySelector(UISelectors.addMealItemButton).addEventListener('click', handleAddItemSubmit)
         document.querySelector(UISelectors.foodItemsList).addEventListener('click', handleItemEditSubmit)
-        document.querySelector(UISelectors.mealForm).addEventListener('click', handleItemUpdateSubmit)
+        document.querySelector(UISelectors.mealForm).addEventListener('click', handleSubmit)
+        document.querySelector(UISelectors.backButton).addEventListener('click',)
     }
 
     const preventAddItemSubmitWhenEnterIsPressed = (e) => {
@@ -190,14 +191,15 @@ const App = ((ItemController, UIController) => {
         }
     }
 
-    const handleItemUpdateSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
-        if (isUpdateItemButton(e)) updateFoodItem()
+        if (isUpdateItemButton(e)) handleItemUpdateSubmit()
+        if (isBackButton(e)) UIController.clearEditState()
     }
     const isUpdateItemButton = (e) => {
         return e.target.matches(UISelectors.updateItemButton)
     }
-    const updateFoodItem = () => {
+    const handleItemUpdateSubmit = () => {
         const { name, calories } = UIController.getItemInput()
         if (isItemNameNotValid(name) || isItemCaloriesNotValid(calories)) return
         const updatedFoodItem = ItemController.updateFoodItem(name, calories)
@@ -205,6 +207,9 @@ const App = ((ItemController, UIController) => {
         const totalCalories = ItemController.getTotalCalories()
         UIController.renderTotalCalories(totalCalories)
         UIController.clearEditState()
+    }
+    const isBackButton = (e) => {
+        return e.target.matches(UISelectors.backButton)
     }
 
     return {
