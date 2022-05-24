@@ -134,7 +134,7 @@ const UIController = (() => {
                 const foodItemId = parseInt(foodItem.dataset.foodId)
                 if (foodItemId === item.id) {
                     const foodItemToEdit = document.querySelector(`[data-food-id="${foodItemId}"]`)
-                    foodItemToEdit.querySelector(UISelectors.mealItemName).innerText = item.name
+                    foodItemToEdit.querySelector(UISelectors.mealItemName).innerText = `${item.name} : `
                     foodItemToEdit.querySelector(UISelectors.mealItemCalories).innerText = item.calories
                 }
             })
@@ -153,7 +153,6 @@ const App = ((ItemController, UIController) => {
         document.querySelector(UISelectors.addMealItemButton).addEventListener('click', handleAddItemSubmit)
         document.querySelector(UISelectors.foodItemsList).addEventListener('click', handleItemEditSubmit)
         document.querySelector(UISelectors.mealForm).addEventListener('click', handleSubmit)
-        document.querySelector(UISelectors.backButton).addEventListener('click',)
     }
 
     const preventAddItemSubmitWhenEnterIsPressed = (e) => {
