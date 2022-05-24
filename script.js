@@ -26,4 +26,11 @@ const UIController = (() => {
 
 const App = ((ItemController, UIController) => {
 
+    return {
+        initialize() {
+            console.log(ItemController.logData())
+        }
+    }
 })(ItemController, UIController)
+
+App.initialize()
