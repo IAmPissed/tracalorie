@@ -14,6 +14,9 @@ const ItemController = (() => {
     }
 
     return {
+        getFoodItems() {
+            return data.foodItems
+        },
         logData() {
             return data
         }
@@ -21,14 +24,37 @@ const ItemController = (() => {
 })()
 
 const UIController = (() => {
+    const UISelectors = {
+        mealItemTemplate: '[data-meal-item-template]',
+        mealItemsList: '[data-meal-items-list]',
+        mealItemName: '[data-meal-item-name]',
+        mealItemCalories: '[data-meal-item-calories]',
+        addMealItemButton: '[data-add-meal-item-button]',
+        itemNameInput: '[data-item-name-input]',
+        itemCaloriesInput: '[data-item-calories-input]',
+        totalCalories: '[data-total-calories]'
+    }
 
+    return {
+        renderFoodItems(foodItems) {
+            foodItems.forEach((foodItem) => {
+                const foodItemTemplate = document.querySelector(UISelectors.mealItemTemplate)
+                const foodItemElement = foodItemTemplate.content.cloneNode(true)
+                foodItemElement.firstElementChild.dataset.foodId = foodItem.id
+                foodItemElement.querySelector(UISelectors.mealItemName).innerText = `${foodItem.name} :`
+                foodItemElement.querySelector(UISelectors.mealItemCalories).innerText = foodItem.calories
+                document.querySelector(UISelectors.mealItemsList).append(foodItemElement)
+            })
+        }
+    }
 })()
 
 const App = ((ItemController, UIController) => {
 
     return {
         initialize() {
-            console.log(ItemController.logData())
+            const foodItems = ItemController.getFoodItems()
+            UIController.renderFoodItems(foodItems)
         }
     }
 })(ItemController, UIController)
