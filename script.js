@@ -1,10 +1,11 @@
 const SotrageController = (() => {
     const LOCAL_STORAGE_FOOD_ITEMS_KEY = 'tracalorie.foodItems'
-    let items = JSON.parse(localStorage.getItem(LOCAL_STORAGE_FOOD_ITEMS_KEY)) || null
+    let items = JSON.parse(localStorage.getItem(LOCAL_STORAGE_FOOD_ITEMS_KEY)) || []
 
     return {
         storeItem(item) {
-
+            items.push(item)
+            localStorage.setItem(LOCAL_STORAGE_FOOD_ITEMS_KEY, JSON.stringify(items))
         },
         getItems() {
 
@@ -182,7 +183,7 @@ const UIController = (() => {
     }
 })()
 
-const App = ((ItemController, UIController) => {
+const App = ((ItemController, SotrageController, UIController) => {
     const UISelectors = UIController.getSelectors()
 
     const loadEventListeners = () => {
@@ -209,6 +210,7 @@ const App = ((ItemController, UIController) => {
         UIController.renderFoodItem(newFoodItem)
         const totalCalories = ItemController.getTotalCalories()
         UIController.renderTotalCalories(totalCalories)
+        SotrageController.storeItem(newFoodItem)
         UIController.clearInputs()
     }
     const isItemNameNotValid = (name) => {
@@ -281,6 +283,6 @@ const App = ((ItemController, UIController) => {
             loadEventListeners()
         }
     }
-})(ItemController, UIController)
+})(ItemController, SotrageController, UIController)
 
 App.initialize()
