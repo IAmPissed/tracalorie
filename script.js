@@ -68,6 +68,10 @@ const UIController = (() => {
                 calories: document.querySelector(UISelectors.itemCaloriesInput).value
             }
         },
+        clearInputs() {
+            document.querySelector(UISelectors.itemNameInput).value = ''
+            document.querySelector(UISelectors.itemCaloriesInput).value = ''
+        },
         getSelectors() {
             return UISelectors
         }
@@ -88,6 +92,7 @@ const App = ((ItemController, UIController) => {
         if (isItemNameNotValid(name) || isItemCaloriesNotValid(calories)) return
         const newFoodItem = ItemController.addItem(name, calories)
         UIController.renderFoodItem(newFoodItem)
+        UIController.clearInputs()
     }
     const isItemNameNotValid = (name) => {
         return !/^[a-zA-Z\s]+$/.test(name)
