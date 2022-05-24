@@ -31,6 +31,19 @@ const ItemController = (() => {
             data.totalCalories = totalCalories
             return data.totalCalories
         },
+        getFoodItemById(id) {
+            const selectedFoodItem = data.foodItems.find((foodItem) => (foodItem.id === id))
+            return selectedFoodItem
+        },
+        setCurrentItem(item) {
+            data.currentFoodItem = item
+        },
+        getCurrentItem() {
+            return {
+                name: data.currentFoodItem.name,
+                calories: data.currentFoodItem.calories
+            }
+        },
         logData() {
             return data
         },
@@ -40,18 +53,25 @@ const ItemController = (() => {
 
 const UIController = (() => {
     const UISelectors = {
-        mealItemTemplate: '[data-meal-item-template]',
-        mealItemsList: '[data-meal-items-list]',
-        mealItemName: '[data-meal-item-name]',
-        mealItemCalories: '[data-meal-item-calories]',
         addMealItemButton: '[data-add-meal-item-button]',
-        itemNameInput: '[data-item-name-input]',
         itemCaloriesInput: '[data-item-calories-input]',
+        mealItemTemplate: '[data-meal-item-template]',
+        mealItemCalories: '[data-meal-item-calories]',
+        cardButtonGroup: '[data-card-button-group]',
+        itemEditButton: '[data-edit-meal-item-button]',
         totalCalories: '[data-total-calories]',
-        cardButtonGroup: '[data-card-button-group]'
+        mealItemsList: '[data-meal-items-list]',
+        foodItemsList: '[data-meal-items-list]',
+        itemNameInput: '[data-item-name-input]',
+        mealItemName: '[data-meal-item-name]',
     }
 
     return {
+        addItemToForm() {
+            const { name, calories } = ItemController.getCurrentItem()
+            document.querySelector(UISelectors.itemNameInput).value = name
+            document.querySelector(UISelectors.itemCaloriesInput).value = calories
+        },
         renderFoodItems(foodItems) {
             foodItems.forEach((foodItem) => {
                 const foodItemTemplate = document.querySelector(UISelectors.mealItemTemplate)
@@ -95,11 +115,12 @@ const UIController = (() => {
 })()
 
 const App = ((ItemController, UIController) => {
+    const UISelectors = UIController.getSelectors()
 
     const loadEventListeners = () => {
-        const UISelectors = UIController.getSelectors()
         document.addEventListener('keypress', preventAddItemSubmitWhenEnterIsPressed)
         document.querySelector(UISelectors.addMealItemButton).addEventListener('click', handleAddItemSubmit)
+        document.querySelector(UISelectors.foodItemsList).addEventListener('click', handleItemEditSubmit)
     }
 
     const preventAddItemSubmitWhenEnterIsPressed = (e) => {
@@ -125,6 +146,15 @@ const App = ((ItemController, UIController) => {
     }
     const isItemCaloriesNotValid = (calories) => {
         return !/^[\d]+$/.test(calories)
+    }
+
+    const handleItemEditSubmit = (e) => {
+        if (e.target.matches(UISelectors.itemEditButton)) {
+            const foodId = parseInt(e.target.parentElement.dataset.foodId)
+            const selectedFoodItemToEdit = ItemController.getFoodItemById(foodId)
+            ItemController.setCurrentItem(selectedFoodItemToEdit)
+            UIController.addItemToForm()
+        }
     }
 
     return {
