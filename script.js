@@ -16,7 +16,7 @@ const SotrageController = (() => {
             localStorage.setItem(LOCAL_STORAGE_FOOD_ITEMS_KEY, JSON.stringify(items))
         },
         clearItems() {
-
+            localStorage.removeItem(LOCAL_STORAGE_FOOD_ITEMS_KEY)
         },
         updateItem(updatedItem) {
             const { id } = items.find(item => item.id === updatedItem.id)
@@ -277,6 +277,7 @@ const App = ((ItemController, SotrageController, UIController) => {
         UIController.clearElement(foodItemsList)
         const totalCalories = ItemController.getTotalCalories()
         UIController.renderTotalCalories(totalCalories)
+        SotrageController.clearItems()
         UIController.clearEditState()
     }
 
