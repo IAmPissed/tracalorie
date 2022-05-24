@@ -47,7 +47,8 @@ const UIController = (() => {
         addMealItemButton: '[data-add-meal-item-button]',
         itemNameInput: '[data-item-name-input]',
         itemCaloriesInput: '[data-item-calories-input]',
-        totalCalories: '[data-total-calories]'
+        totalCalories: '[data-total-calories]',
+        cardButtonGroup: '[data-card-button-group]'
     }
 
     return {
@@ -82,6 +83,11 @@ const UIController = (() => {
             document.querySelector(UISelectors.itemNameInput).value = ''
             document.querySelector(UISelectors.itemCaloriesInput).value = ''
         },
+        clearEditState() {
+            UIController.clearInputs()
+            if (document.querySelector(UISelectors.cardButtonGroup)) document.querySelector(UISelectors.cardButtonGroup).remove()
+            document.querySelector(UISelectors.addMealItemButton).style.display = 'flex'
+        },
         getSelectors() {
             return UISelectors
         }
@@ -115,6 +121,7 @@ const App = ((ItemController, UIController) => {
 
     return {
         initialize() {
+            UIController.clearEditState()
             const foodItems = ItemController.getFoodItems()
             UIController.renderFoodItems(foodItems)
             const totalCalories = ItemController.getTotalCalories()
