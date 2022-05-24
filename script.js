@@ -24,6 +24,10 @@ const ItemController = (() => {
             data.foodItems.push(newFoodItem)
             return newFoodItem
         },
+        deleteFoodItem(id) {
+            const newFoodItems = data.foodItems.filter(foodItem => foodItem.id !== id)
+            data.foodItems = newFoodItems
+        },
         getTotalCalories() {
             const totalCalories = data.foodItems
                 .map(foodItem => (foodItem.calories))
@@ -39,10 +43,7 @@ const ItemController = (() => {
             data.currentFoodItem = item
         },
         getCurrentItem() {
-            return {
-                name: data.currentFoodItem.name,
-                calories: data.currentFoodItem.calories
-            }
+            return data.currentFoodItem
         },
         updateFoodItem(name, calories) {
             calories = parseInt(calories)
@@ -87,13 +88,15 @@ const UIController = (() => {
             document.querySelector(UISelectors.itemCaloriesInput).value = calories
         },
         renderFoodItems(foodItems) {
+            const foodItemsList = document.querySelector(UISelectors.mealItemsList)
+            UIController.clearElement(foodItemsList)
             foodItems.forEach((foodItem) => {
                 const foodItemTemplate = document.querySelector(UISelectors.mealItemTemplate)
                 const foodItemElement = foodItemTemplate.content.cloneNode(true)
                 foodItemElement.firstElementChild.dataset.foodId = foodItem.id
                 foodItemElement.querySelector(UISelectors.mealItemName).innerText = `${foodItem.name} :`
                 foodItemElement.querySelector(UISelectors.mealItemCalories).innerText = foodItem.calories
-                document.querySelector(UISelectors.mealItemsList).append(foodItemElement)
+                foodItemsList.append(foodItemElement)
             })
         },
         renderFoodItem(foodItem) {
@@ -141,6 +144,11 @@ const UIController = (() => {
         },
         getSelectors() {
             return UISelectors
+        },
+        clearElement(element) {
+            while (element.firstElementChild) {
+                element.removeChild(element.firstElementChild)
+            }
         }
     }
 })()
@@ -194,6 +202,7 @@ const App = ((ItemController, UIController) => {
         e.preventDefault()
         if (isUpdateItemButton(e)) handleItemUpdateSubmit()
         if (isBackButton(e)) UIController.clearEditState()
+        if (isDeleteItemButton(e)) handleItemDeleteSubmit()
     }
     const isUpdateItemButton = (e) => {
         return e.target.matches(UISelectors.updateItemButton)
@@ -209,6 +218,18 @@ const App = ((ItemController, UIController) => {
     }
     const isBackButton = (e) => {
         return e.target.matches(UISelectors.backButton)
+    }
+    const isDeleteItemButton = (e) => {
+        return e.target.matches(UISelectors.deleteItemButton)
+    }
+    const handleItemDeleteSubmit = () => {
+        const { id } = ItemController.getCurrentItem()
+        ItemController.deleteFoodItem(id)
+        const foodItems = ItemController.getFoodItems()
+        UIController.renderFoodItems(foodItems)
+        const totalCalories = ItemController.getTotalCalories()
+        UIController.renderTotalCalories(totalCalories)
+        UIController.clearEditState()
     }
 
     return {
