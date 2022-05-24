@@ -98,7 +98,15 @@ const App = ((ItemController, UIController) => {
 
     const loadEventListeners = () => {
         const UISelectors = UIController.getSelectors()
+        document.addEventListener('keypress', preventAddItemSubmitWhenEnterIsPressed)
         document.querySelector(UISelectors.addMealItemButton).addEventListener('click', handleAddItemSubmit)
+    }
+
+    const preventAddItemSubmitWhenEnterIsPressed = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            return
+        }
     }
 
     const handleAddItemSubmit = (e) => {
