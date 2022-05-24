@@ -28,6 +28,11 @@ const ItemController = (() => {
             const newFoodItems = data.foodItems.filter(foodItem => foodItem.id !== id)
             data.foodItems = newFoodItems
         },
+        clearAllFoodItems() {
+            data.foodItems = []
+            data.currentFoodItem = null
+            data.totalCalories = 0
+        },
         getTotalCalories() {
             const totalCalories = data.foodItems
                 .map(foodItem => (foodItem.calories))
@@ -72,6 +77,7 @@ const UIController = (() => {
         cardButtonGroup: '[data-card-button-group]',
         foodItemElement: '[data-food-item]',
         itemEditButton: '[data-edit-meal-item-button]',
+        clearAllButton: '[data-clear-all-button]',
         totalCalories: '[data-total-calories]',
         mealItemsList: '[data-meal-items-list]',
         foodItemsList: '[data-meal-items-list]',
@@ -161,6 +167,7 @@ const App = ((ItemController, UIController) => {
         document.querySelector(UISelectors.addMealItemButton).addEventListener('click', handleAddItemSubmit)
         document.querySelector(UISelectors.foodItemsList).addEventListener('click', handleItemEditSubmit)
         document.querySelector(UISelectors.mealForm).addEventListener('click', handleSubmit)
+        document.querySelector(UISelectors.clearAllButton).addEventListener('click', handleClearAllSubmit)
     }
 
     const preventAddItemSubmitWhenEnterIsPressed = (e) => {
@@ -227,6 +234,15 @@ const App = ((ItemController, UIController) => {
         ItemController.deleteFoodItem(id)
         const foodItems = ItemController.getFoodItems()
         UIController.renderFoodItems(foodItems)
+        const totalCalories = ItemController.getTotalCalories()
+        UIController.renderTotalCalories(totalCalories)
+        UIController.clearEditState()
+    }
+
+    const handleClearAllSubmit = () => {
+        ItemController.clearAllFoodItems()
+        const foodItemsList = document.querySelector(UISelectors.mealItemsList)
+        UIController.clearElement(foodItemsList)
         const totalCalories = ItemController.getTotalCalories()
         UIController.renderTotalCalories(totalCalories)
         UIController.clearEditState()
