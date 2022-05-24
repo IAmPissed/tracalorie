@@ -24,6 +24,13 @@ const ItemController = (() => {
             data.foodItems.push(newFoodItem)
             return newFoodItem
         },
+        getTotalCalories() {
+            const totalCalories = data.foodItems
+                .map(foodItem => (foodItem.calories))
+                .reduce((prev, curr) => prev + curr, 0)
+            data.totalCalories = totalCalories
+            return data.totalCalories
+        },
         logData() {
             return data
         },
@@ -62,6 +69,9 @@ const UIController = (() => {
             foodItemElement.querySelector(UISelectors.mealItemCalories).innerText = foodItem.calories
             document.querySelector(UISelectors.mealItemsList).append(foodItemElement)
         },
+        renderTotalCalories(totalCalories) {
+            document.querySelector(UISelectors.totalCalories).innerText = totalCalories
+        },
         getItemInput() {
             return {
                 name: document.querySelector(UISelectors.itemNameInput).value,
@@ -92,6 +102,8 @@ const App = ((ItemController, UIController) => {
         if (isItemNameNotValid(name) || isItemCaloriesNotValid(calories)) return
         const newFoodItem = ItemController.addItem(name, calories)
         UIController.renderFoodItem(newFoodItem)
+        const totalCalories = ItemController.getTotalCalories()
+        UIController.renderTotalCalories(totalCalories)
         UIController.clearInputs()
     }
     const isItemNameNotValid = (name) => {
@@ -105,6 +117,8 @@ const App = ((ItemController, UIController) => {
         initialize() {
             const foodItems = ItemController.getFoodItems()
             UIController.renderFoodItems(foodItems)
+            const totalCalories = ItemController.getTotalCalories()
+            UIController.renderTotalCalories(totalCalories)
             loadEventListeners()
         }
     }
