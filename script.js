@@ -166,7 +166,7 @@ const UIController = (() => {
             document.querySelector(UISelectors.addMealItemButton).style.display = 'none'
             document.querySelector(UISelectors.mealForm).append(controlButtonsElement)
         },
-        updateFoodItem(item) {
+        updateFoodItemElement(item) {
             const foodItems = Array.from(document.querySelectorAll(UISelectors.foodItemElement))
             foodItems.forEach(foodItem => {
                 const foodItemId = parseInt(foodItem.dataset.foodId)
@@ -249,7 +249,7 @@ const App = ((ItemController, SotrageController, UIController) => {
         if (isItemNameNotValid(name) || isItemCaloriesNotValid(calories)) return
         const updatedFoodItem = ItemController.updateFoodItem(name, calories)
         SotrageController.updateItem(updatedFoodItem)
-        UIController.updateFoodItem(updatedFoodItem)
+        UIController.updateFoodItemElement(updatedFoodItem)
         const totalCalories = ItemController.getTotalCalories()
         UIController.renderTotalCalories(totalCalories)
         UIController.clearEditState()
